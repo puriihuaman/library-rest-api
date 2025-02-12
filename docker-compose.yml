@@ -1,0 +1,22 @@
+services:
+  library_app:	
+    container_name: library_app
+    image: puriihuaman-library-rest-api:1.0.0
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - DATABASE_URL=jdbc:mysql://library_db:3306/library_rest_api
+      - DATABASE_USERNAME=root
+      - DATABASE_PASSWORD=root
+    depends_on:
+      - library_db
+
+  library_db:
+    container_name: library_db
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: library_rest_api

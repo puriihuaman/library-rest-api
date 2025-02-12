@@ -1,0 +1,18 @@
+# exclude hidden dirs .git etc.
+.*
+*.iml
+gradle
+src
+
+# exclude build binaries
+build/*
+
+# except files for docker
+!build/docker
+
+.idea/
+*.iml
+*.iws
+target/
+.sonar/
+.sonarlint/
