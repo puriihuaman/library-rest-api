@@ -17,7 +17,7 @@ public interface AuthorDAO {
 
 	Author updateAuthor(Author author);
 
-	Integer deleteAuthor(String authorId);
+	void deleteAuthor(String authorId);
 
 	Page<Author> filterAuthors(Specification<Author> spec, Pageable page);
 }

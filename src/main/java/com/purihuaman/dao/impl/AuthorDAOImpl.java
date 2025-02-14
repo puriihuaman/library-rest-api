@@ -5,14 +5,15 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Repository;
 
 import com.purihuaman.dao.AuthorDAO;
 import com.purihuaman.entity.Author;
 import com.purihuaman.repository.AuthorRepository;
 
+@Repository
 public class AuthorDAOImpl implements AuthorDAO {
-
-	final private AuthorRepository authorRepository;
+	private final AuthorRepository authorRepository;
 
 	public AuthorDAOImpl(AuthorRepository authorRepository) {
 		this.authorRepository = authorRepository;
@@ -25,7 +26,7 @@ public class AuthorDAOImpl implements AuthorDAO {
 
 	@Override
 	public Author getAuthorById(String authorId) {
-		return authorRepository.findById(authorId).get();
+		return authorRepository.findById(authorId).orElse(null);
 	}
 
 	@Override
@@ -39,14 +40,12 @@ public class AuthorDAOImpl implements AuthorDAO {
 	}
 
 	@Override
-	public Integer deleteAuthor(String authorId) {
+	public void deleteAuthor(String authorId) {
 		authorRepository.deleteById(authorId);
-		return 1;
 	}
 
 	@Override
 	public Page<Author> filterAuthors(Specification<Author> spec, Pageable page) {
 		return authorRepository.findAll(spec, page);
 	}
-
 }

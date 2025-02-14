@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,11 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.purihuaman.entity.Author;
+import com.purihuaman.dto.AuthorDTO;
 import com.purihuaman.service.AuthorService;
 
 @RestController
-@RequestMapping(name = "/authors", produces = "application/json")
+@RequestMapping(name = "/authors", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AuthorController {
 	private final AuthorService service;
 
@@ -28,32 +30,38 @@ public class AuthorController {
 	}
 
 	@GetMapping
-	public List<Author> getAllAuthors(@RequestParam Map<String, String> keywords) {
+	public ResponseEntity<List<AuthorDTO>> getAllAuthors(@RequestParam Map<String, String> keywords) {
 		short offset = keywords.containsKey("offset") ? Short.parseShort(keywords.get("offset")) : 0;
 		short limit = keywords.containsKey("limit") ? Short.parseShort(keywords.get("limit")) : 10;
 
 		Pageable page = PageRequest.of(offset, limit);
 
-		return service.getAllAuthors(page);
+		List<AuthorDTO> result = service.getAllAuthors(page);
+		return ResponseEntity.ok().body(result);
 	}
 
 	@GetMapping("/{id}")
-	public Author getAuthorById(@PathVariable("id") String authorId) {
-		return service.getAuthorById(authorId);
+	public ResponseEntity<AuthorDTO> getAuthorById(@PathVariable("id") String authorId) {
+
+		AuthorDTO result = service.getAuthorById(authorId);
+		return ResponseEntity.ok().body(result);
 	}
 
 	@PostMapping
-	public Author createAuthor(@RequestBody Author author) {
-		return service.addAuthor(author);
+	public ResponseEntity<AuthorDTO> createAuthor(@RequestBody AuthorDTO author) {
+		AuthorDTO result = service.addAuthor(author);
+		return ResponseEntity.ok().body(result);
 	}
 
 	@PutMapping("/{id}")
-	public Author updateAuthor(@PathVariable("id") String authorId, @RequestBody Author author) {
-		return service.updateAuthor(author);
+	public ResponseEntity<AuthorDTO> updateAuthor(@PathVariable("id") String authorId, @RequestBody AuthorDTO author) {
+		AuthorDTO result = service.updateAuthor(author);
+		return ResponseEntity.ok().body(result);
 	}
 
 	@DeleteMapping("/{id}")
-	public void deleteAuthor(@PathVariable("id") String authorId) {
+	public ResponseEntity<Void> deleteAuthor(@PathVariable("id") String authorId) {
 		service.deleteAuthor(authorId);
+		return ResponseEntity.noContent().build();
 	}
 }

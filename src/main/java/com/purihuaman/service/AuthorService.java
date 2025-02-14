@@ -5,18 +5,18 @@ import java.util.Map;
 
 import org.springframework.data.domain.Pageable;
 
-import com.purihuaman.entity.Author;
+import com.purihuaman.dto.AuthorDTO;
 
 public interface AuthorService {
-	List<Author> getAllAuthors(Pageable page);
+	List<AuthorDTO> getAllAuthors(Pageable page);
 
-	Author getAuthorById(String authorId);
+	AuthorDTO getAuthorById(String authorId);
 
-	Author addAuthor(Author author);
+	AuthorDTO addAuthor(AuthorDTO author);
 
-	Author updateAuthor(Author author);
+	AuthorDTO updateAuthor(AuthorDTO author);
 
-	Integer deleteAuthor(String authorId);
+	void deleteAuthor(String authorId);
 
-	List<Author> filterAuthors(Map<String, String> valuesToFilter, Pageable page);
+	List<AuthorDTO> filterAuthors(Map<String, String> valuesToFilter, Pageable page);
 }
