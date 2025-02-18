@@ -20,17 +20,17 @@ public class AuthorDAOImpl implements AuthorDAO {
 	}
 
 	@Override
-	public List<Author> getAllAuthors(Pageable page) {
+	public List<Author> findAllAuthors(Pageable page) {
 		return authorRepository.findAll(page).getContent();
 	}
 
 	@Override
-	public Author getAuthorById(String authorId) {
+	public Author findAuthorById(String authorId) {
 		return authorRepository.findById(authorId).orElse(null);
 	}
 
 	@Override
-	public Author addAuthor(Author author) {
+	public Author createAuthor(Author author) {
 		return authorRepository.save(author);
 	}
 

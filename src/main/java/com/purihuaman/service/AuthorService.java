@@ -8,11 +8,11 @@ import org.springframework.data.domain.Pageable;
 import com.purihuaman.dto.AuthorDTO;
 
 public interface AuthorService {
-	List<AuthorDTO> getAllAuthors(Pageable page);
+	List<AuthorDTO> findAllAuthors(Pageable page);
 
-	AuthorDTO getAuthorById(String authorId);
+	AuthorDTO findAuthorById(String authorId);
 
-	AuthorDTO addAuthor(AuthorDTO author);
+	AuthorDTO createAuthor(AuthorDTO author);
 
 	AuthorDTO updateAuthor(AuthorDTO author);
 

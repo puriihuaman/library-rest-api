@@ -23,45 +23,45 @@ import com.purihuaman.service.AuthorService;
 @RestController
 @RequestMapping(name = "/authors", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AuthorController {
-	private final AuthorService service;
+	private final AuthorService authorService;
 
 	public AuthorController(AuthorService service) {
-		this.service = service;
+		this.authorService = service;
 	}
 
 	@GetMapping
-	public ResponseEntity<List<AuthorDTO>> getAllAuthors(@RequestParam Map<String, String> keywords) {
+	public ResponseEntity<List<AuthorDTO>> findAllAuthors(@RequestParam Map<String, String> keywords) {
 		short offset = keywords.containsKey("offset") ? Short.parseShort(keywords.get("offset")) : 0;
 		short limit = keywords.containsKey("limit") ? Short.parseShort(keywords.get("limit")) : 10;
 
 		Pageable page = PageRequest.of(offset, limit);
 
-		List<AuthorDTO> result = service.getAllAuthors(page);
+		List<AuthorDTO> result = authorService.findAllAuthors(page);
 		return ResponseEntity.ok().body(result);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<AuthorDTO> getAuthorById(@PathVariable("id") String authorId) {
+	public ResponseEntity<AuthorDTO> findAuthorById(@PathVariable("id") String authorId) {
 
-		AuthorDTO result = service.getAuthorById(authorId);
+		AuthorDTO result = authorService.findAuthorById(authorId);
 		return ResponseEntity.ok().body(result);
 	}
 
 	@PostMapping
 	public ResponseEntity<AuthorDTO> createAuthor(@RequestBody AuthorDTO author) {
-		AuthorDTO result = service.addAuthor(author);
+		AuthorDTO result = authorService.createAuthor(author);
 		return ResponseEntity.ok().body(result);
 	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<AuthorDTO> updateAuthor(@PathVariable("id") String authorId, @RequestBody AuthorDTO author) {
-		AuthorDTO result = service.updateAuthor(author);
+		AuthorDTO result = authorService.updateAuthor(author);
 		return ResponseEntity.ok().body(result);
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteAuthor(@PathVariable("id") String authorId) {
-		service.deleteAuthor(authorId);
+		authorService.deleteAuthor(authorId);
 		return ResponseEntity.noContent().build();
 	}
 }

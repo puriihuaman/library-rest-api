@@ -26,26 +26,26 @@ public class AuthorServiceImpl implements AuthorService {
 	}
 
 	@Override
-	public List<AuthorDTO> getAllAuthors(Pageable page) {
-		return mapper.toAuthorDTOList(authorDao.getAllAuthors(page));
+	public List<AuthorDTO> findAllAuthors(Pageable page) {
+		return mapper.toAuthorDTOList(authorDao.findAllAuthors(page));
 	}
 
 	@Override
-	public AuthorDTO getAuthorById(String authorId) {
-		return mapper.toAuthorDTO(authorDao.getAuthorById(authorId));
+	public AuthorDTO findAuthorById(String authorId) {
+		return mapper.toAuthorDTO(authorDao.findAuthorById(authorId));
 	}
 
 	@Override
-	public AuthorDTO addAuthor(AuthorDTO author) {
+	public AuthorDTO createAuthor(AuthorDTO author) {
 		author.setAuthorId(UUID.randomUUID().toString());
 		Author authorToSave = mapper.toAuthor(author);
 
-		return mapper.toAuthorDTO(authorDao.addAuthor(authorToSave));
+		return mapper.toAuthorDTO(authorDao.createAuthor(authorToSave));
 	}
 
 	@Override
 	public AuthorDTO updateAuthor(AuthorDTO author) {
-		AuthorDTO authorFound = getAuthorById(author.getAuthorId());
+		AuthorDTO authorFound = this.findAuthorById(author.getAuthorId());
 
 		authorFound.setFirstName(author.getFirstName());
 		authorFound.setEmail(author.getEmail());
@@ -57,7 +57,7 @@ public class AuthorServiceImpl implements AuthorService {
 
 	@Override
 	public void deleteAuthor(String authorId) {
-		AuthorDTO authorFound = getAuthorById(authorId);
+		AuthorDTO authorFound = this.findAuthorById(authorId);
 		authorDao.deleteAuthor(authorFound.getAuthorId());
 	}
 

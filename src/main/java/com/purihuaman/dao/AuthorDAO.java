@@ -9,11 +9,11 @@ import org.springframework.data.jpa.domain.Specification;
 import com.purihuaman.entity.Author;
 
 public interface AuthorDAO {
-	List<Author> getAllAuthors(Pageable page);
+	List<Author> findAllAuthors(Pageable page);
 
-	Author getAuthorById(String authorId);
+	Author findAuthorById(String authorId);
 
-	Author addAuthor(Author author);
+	Author createAuthor(Author author);
 
 	Author updateAuthor(Author author);
 
