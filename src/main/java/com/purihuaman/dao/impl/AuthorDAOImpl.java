@@ -1,15 +1,15 @@
 package com.purihuaman.dao.impl;
 
-import java.util.List;
-
+import com.purihuaman.dao.AuthorDAO;
+import com.purihuaman.model.AuthorEntity;
+import com.purihuaman.repository.AuthorRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
-import com.purihuaman.dao.AuthorDAO;
-import com.purihuaman.entity.Author;
-import com.purihuaman.repository.AuthorRepository;
+import java.util.List;
+import java.util.UUID;
 
 @Repository
 public class AuthorDAOImpl implements AuthorDAO {
@@ -20,32 +20,32 @@ public class AuthorDAOImpl implements AuthorDAO {
 	}
 
 	@Override
-	public List<Author> findAllAuthors(Pageable page) {
+	public List<AuthorEntity> findAllAuthors(Pageable page) {
 		return authorRepository.findAll(page).getContent();
 	}
 
 	@Override
-	public Author findAuthorById(String authorId) {
+	public AuthorEntity findAuthorById(UUID authorId) {
 		return authorRepository.findById(authorId).orElse(null);
 	}
 
 	@Override
-	public Author createAuthor(Author author) {
-		return authorRepository.save(author);
+	public AuthorEntity createAuthor(AuthorEntity authorEntity) {
+		return authorRepository.save(authorEntity);
 	}
 
 	@Override
-	public Author updateAuthor(Author author) {
-		return authorRepository.save(author);
+	public AuthorEntity updateAuthor(AuthorEntity authorEntity) {
+		return authorRepository.save(authorEntity);
 	}
 
 	@Override
-	public void deleteAuthor(String authorId) {
+	public void deleteAuthor(UUID authorId) {
 		authorRepository.deleteById(authorId);
 	}
 
 	@Override
-	public Page<Author> filterAuthors(Specification<Author> spec, Pageable page) {
+	public Page<AuthorEntity> filterAuthors(Specification<AuthorEntity> spec, Pageable page) {
 		return authorRepository.findAll(spec, page);
 	}
 }

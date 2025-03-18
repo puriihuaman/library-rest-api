@@ -1,23 +1,23 @@
 package com.purihuaman.dao;
 
-import java.util.List;
-
+import com.purihuaman.model.AuthorEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
-import com.purihuaman.entity.Author;
+import java.util.List;
+import java.util.UUID;
 
 public interface AuthorDAO {
-	List<Author> findAllAuthors(Pageable page);
+	List<AuthorEntity> findAllAuthors(Pageable page);
 
-	Author findAuthorById(String authorId);
+	AuthorEntity findAuthorById(UUID authorId);
 
-	Author createAuthor(Author author);
+	AuthorEntity createAuthor(AuthorEntity authorEntity);
 
-	Author updateAuthor(Author author);
+	AuthorEntity updateAuthor(AuthorEntity authorEntity);
 
-	void deleteAuthor(String authorId);
+	void deleteAuthor(UUID authorId);
 
-	Page<Author> filterAuthors(Specification<Author> spec, Pageable page);
+	Page<AuthorEntity> filterAuthors(Specification<AuthorEntity> spec, Pageable page);
 }
