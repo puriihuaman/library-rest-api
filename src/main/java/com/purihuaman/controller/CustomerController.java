@@ -27,16 +27,16 @@ import java.util.UUID;
 public class CustomerController {
 	private final CustomerService customerService;
 
-	private CustomerController(CustomerService customerService) {
+	public CustomerController(CustomerService customerService) {
 		this.customerService = customerService;
 	}
 
-	@GetMapping("/all")
+	@GetMapping("all")
 	public ResponseEntity<Object> findAll(@RequestParam Map<String, String> keywords) {
 		short
 			offset =
 			keywords.containsKey("offset") ? Short.parseShort(keywords.get("offset")) : 0;
-		short limit = keywords.containsKey("limit") ? Short.parseShort(keywords.get("limit")) : 0;
+		short limit = keywords.containsKey("limit") ? Short.parseShort(keywords.get("limit")) : 10;
 		Pageable page = PageRequest.of(offset, limit);
 
 		List<CustomerDTO>
@@ -47,19 +47,19 @@ public class CustomerController {
 		return ResponseEntity.ok(customers);
 	}
 
-	@GetMapping("/id/{id}")
+	@GetMapping("id/{id}")
 	public ResponseEntity<Object> findCustomerById(@PathVariable UUID id) {
 		CustomerDTO foundCustomerDTO = customerService.findCustomerById(id);
 		return ResponseEntity.ok(foundCustomerDTO);
 	}
 
-	@PostMapping("/create")
+	@PostMapping("create")
 	public ResponseEntity<Object> createCustomer(@Validated @RequestBody CustomerDTO customerDTO) {
 		CustomerDTO savedCustomerDTO = customerService.createCustomer(customerDTO);
 		return ResponseEntity.ok(savedCustomerDTO);
 	}
 
-	@PutMapping("/update/{id}")
+	@PutMapping("update/{id}")
 	public ResponseEntity<Object> updateCustomer(
 		@PathVariable UUID id,
 		@Validated @RequestBody CustomerDTO customerDTO
@@ -69,7 +69,7 @@ public class CustomerController {
 		return ResponseEntity.ok(updatedCustomerDTO);
 	}
 
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("delete/{id}")
 	public ResponseEntity<Object> deleteCustomer(@PathVariable UUID id) {
 		customerService.deleteCustomer(id);
 		return ResponseEntity.ok().build();

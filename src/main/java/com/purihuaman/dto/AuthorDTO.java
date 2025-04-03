@@ -17,7 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthorDTO {
-	@JsonProperty(value = "id", required = true, access = JsonProperty.Access.WRITE_ONLY)
+	@JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)
 	private UUID id;
 
 	@NotNull
@@ -28,8 +28,4 @@ public class AuthorDTO {
 	@Email
 	@JsonProperty(value = "email", required = true)
 	private String email;
-
-	@NotNull
-	@JsonProperty(value = "available", defaultValue = "true")
-	private Boolean available;
 }

@@ -2,6 +2,7 @@ package com.purihuaman.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,21 +19,27 @@ import java.util.UUID;
 @Data
 public class LoanEntity {
 	@Id
-	@Column(name = "id", unique = true, length = 36)
 	@GeneratedValue(strategy = GenerationType.UUID)
+	@Column(name = "LOAN_ID", unique = true, length = 36)
 	private UUID id;
 
-	@Column(name = "loanDate", nullable = false)
+	@Column(name = "LOAN_DATE", nullable = false)
 	private LocalDateTime loanDate;
 
-	@Column(name = "returnDate", nullable = false)
+	@Column(name = "RETURN_DATE", nullable = false)
 	private LocalDateTime returnDate;
 
-	@ManyToOne
-	@JoinColumn(name = "book_isbn", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "BOOK_ID", referencedColumnName = "BOOK_ID", nullable = false)
 	private BookEntity book;
 
-	@ManyToOne
-	@JoinColumn(name = "customer_id", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "CUSTOMER_ID", referencedColumnName = "CUSTOMER_ID", nullable = false)
 	private CustomerEntity customer;
+
+	public void markAsReturned() {
+		this.returnDate = LocalDateTime.now();
+		this.book.setBorrowedCount(this.book.getBorrowedCount() - 1);
+		this.book.setAvailableCopies(this.book.getAvailableCopies() + 1);
+	}
 }

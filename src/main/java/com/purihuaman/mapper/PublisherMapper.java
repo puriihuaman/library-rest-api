@@ -8,9 +8,9 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface PublisherMapper {
-	PublisherEntity toEntity(PublisherDTO publisherDTO);
-
 	PublisherDTO toDTO(PublisherEntity publisherEntity);
+
+	PublisherEntity toEntity(PublisherDTO publisherDTO);
 
 	List<PublisherEntity> toEntityList(List<PublisherDTO> publisherDTOList);
 

@@ -29,7 +29,7 @@ public class PublisherController {
 		this.publisherService = publisherService;
 	}
 
-	@GetMapping("/all")
+	@GetMapping("all")
 	public ResponseEntity<List<PublisherDTO>> findAllPublishers(
 		@RequestParam Map<String, String> keywords
 	)
@@ -49,19 +49,19 @@ public class PublisherController {
 		return ResponseEntity.ok(result);
 	}
 
-	@GetMapping("/id/{id}")
+	@GetMapping("id/{id}")
 	public ResponseEntity<PublisherDTO> findPublisherById(@PathVariable("id") UUID id) {
 		PublisherDTO result = publisherService.findPublisherById(id);
 		return ResponseEntity.ok().body(result);
 	}
 
-	@PostMapping("/create")
+	@PostMapping("create")
 	public ResponseEntity<PublisherDTO> createPublisher(@RequestBody PublisherDTO publisherDTO) {
 		PublisherDTO result = publisherService.createPublisher(publisherDTO);
 		return ResponseEntity.ok().body(result);
 	}
 
-	@PutMapping("/update/{id}")
+	@PutMapping("update/{id}")
 	public ResponseEntity<PublisherDTO> updatePublisher(
 		@PathVariable("id") UUID id,
 		@RequestBody PublisherDTO publisherDTO
@@ -71,7 +71,7 @@ public class PublisherController {
 		return ResponseEntity.ok().body(result);
 	}
 
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("delete/{id}")
 	public ResponseEntity<Void> deletePublisher(
 		@PathVariable("id") UUID id
 	)

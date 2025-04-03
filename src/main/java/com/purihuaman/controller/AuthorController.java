@@ -29,7 +29,7 @@ public class AuthorController {
 		this.authorService = authorService;
 	}
 
-	@GetMapping("/all")
+	@GetMapping("all")
 	public ResponseEntity<List<AuthorDTO>> findAllAuthors(
 		@RequestParam Map<String, String> keywords
 	)
@@ -49,19 +49,19 @@ public class AuthorController {
 		return ResponseEntity.ok().body(result);
 	}
 
-	@GetMapping("/id/{id}")
+	@GetMapping(value = "id/{id}")
 	public ResponseEntity<AuthorDTO> findAuthorById(@PathVariable("id") UUID authorId) {
 		AuthorDTO result = authorService.findAuthorById(authorId);
 		return ResponseEntity.ok().body(result);
 	}
 
-	@PostMapping("/create")
+	@PostMapping("create")
 	public ResponseEntity<AuthorDTO> createAuthor(@RequestBody AuthorDTO authorDTO) {
 		AuthorDTO result = authorService.createAuthor(authorDTO);
 		return ResponseEntity.ok().body(result);
 	}
 
-	@PutMapping("/update/{id}")
+	@PutMapping("update/{id}")
 	public ResponseEntity<AuthorDTO> updateAuthor(
 		@PathVariable("id") UUID authorId,
 		@RequestBody AuthorDTO authorDTO
@@ -71,7 +71,7 @@ public class AuthorController {
 		return ResponseEntity.ok().body(result);
 	}
 
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("delete/{id}")
 	public ResponseEntity<Void> deleteAuthor(@PathVariable("id") UUID authorId) {
 		authorService.deleteAuthor(authorId);
 		return ResponseEntity.noContent().build();

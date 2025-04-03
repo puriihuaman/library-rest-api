@@ -17,8 +17,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PublisherDTO {
-	@NotNull
-	@Size(min = 36, max = 36)
 	@JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)
 	private UUID id;
 
@@ -26,8 +24,4 @@ public class PublisherDTO {
 	@Size(min = 2, max = 60)
 	@JsonProperty(value = "name", required = true)
 	private String name;
-
-	@NotNull
-	@JsonProperty(value = "available", required = true, defaultValue = "true")
-	private Boolean available;
 }

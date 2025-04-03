@@ -1,8 +1,8 @@
 package com.purihuaman.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.purihuaman.model.BookEntity;
-import com.purihuaman.model.CustomerEntity;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,16 +18,28 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoanDTO {
-	@JsonProperty(value = "id", access = JsonProperty.Access.WRITE_ONLY)
+	@JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)
 	private UUID id;
 
-	@JsonProperty(value = "loanDate", required = true)
+	@NotNull
+	@JsonProperty(value = "loanDate", access = JsonProperty.Access.READ_ONLY)
+	@JsonFormat(
+		shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "UTC"
+	)
 	private LocalDateTime loanDate;
 
-	@JsonProperty(value = "returnDate", required = true)
+	@NotNull
+	@JsonProperty(value = "returnDate")
+	@JsonFormat(
+		shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "UTC"
+	)
 	private LocalDateTime returnDate;
 
-	private BookEntity book;
+	@NotNull
+	@JsonProperty(value = "bookId")
+	private UUID bookId;
 
-	private CustomerEntity customer;
+	@NotNull
+	@JsonProperty(value = "customerId")
+	private UUID customerId;
 }

@@ -54,7 +54,6 @@ public class PublisherService implements PublisherServiceUseCase {
 		PublisherEntity publisherEntityToSave = publisherMapper.toEntity(publisherDTO);
 
 
-		//return publisherMapper.toDTO(publisherDao.createPublisher(publisherEntityToSave));
 		return publisherMapper.toDTO(publisherRepository.save(publisherEntityToSave));
 	}
 
@@ -63,21 +62,17 @@ public class PublisherService implements PublisherServiceUseCase {
 		PublisherDTO existingPublisherDTO = this.findPublisherById(publisherId);
 
 		existingPublisherDTO.setName(publisherDTO.getName());
-		existingPublisherDTO.setAvailable(publisherDTO.getAvailable());
 
-		//Publisher
-		//	updated =
-		//	publisherMapper.toDTO(publisherDao.updatePublisher(publisherMapper.toEntity(
-		//		existingPublisher)));
 		PublisherEntity publisherEntityToSave = publisherMapper.toEntity(existingPublisherDTO);
-		PublisherDTO updated = publisherMapper.toDTO(publisherRepository.save(publisherEntityToSave));
+		PublisherDTO
+			updated =
+			publisherMapper.toDTO(publisherRepository.save(publisherEntityToSave));
 		return updated;
 	}
 
 	@Override
 	public void deletePublisher(UUID publisherId) {
 		PublisherDTO editorialFound = this.findPublisherById(publisherId);
-		//publisherDao.deletePublisher(PUBLISHER_UUID);
 		publisherRepository.deleteById(editorialFound.getId());
 	}
 
@@ -86,7 +81,7 @@ public class PublisherService implements PublisherServiceUseCase {
 		Specification<PublisherEntity>
 			spec =
 			PublisherSpecification.filterPublishers(valuesToFilter);
-		//return publisherMapper.toDTOList(publisherDao.filterPublishers(spec, page).getContent());
+
 		return publisherMapper.toDTOList(publisherRepository.findAll(spec, page).getContent());
 	}
 }

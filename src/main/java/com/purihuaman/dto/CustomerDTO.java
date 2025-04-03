@@ -19,36 +19,36 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomerDTO {
-	@JsonProperty(value = "id", access = JsonProperty.Access.WRITE_ONLY)
+	@JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)
 	private UUID id;
 
-	@JsonProperty(value = "documentId", required = true)
 	@NotNull
 	@NotEmpty
 	@Size(min = 8, max = 8)
+	@JsonProperty(value = "documentId", required = true)
 	private String documentId;
 
-	@JsonProperty(value = "firstName", required = true)
 	@NotNull
 	@NotEmpty
 	@Size(min = 2, max = 50)
+	@JsonProperty(value = "firstName", required = true)
 	private String firstName;
 
-	@JsonProperty(value = "lastName", required = true)
 	@NotNull
 	@NotEmpty
 	@Size(min = 2, max = 50)
+	@JsonProperty(value = "lastName", required = true)
 	private String lastName;
 
-	@JsonProperty(value = "email", required = true)
 	@Email
 	@NotNull
 	@NotEmpty
+	@JsonProperty(value = "email", required = true)
 	private String email;
 
-	@JsonProperty(value = "phoneNumber", required = true)
 	@NotNull
 	@NotEmpty
 	@Size(min = 9, max = 20)
+	@JsonProperty(value = "phoneNumber", required = true)
 	private String phoneNumber;
 }

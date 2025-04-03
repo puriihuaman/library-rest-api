@@ -27,13 +27,11 @@ public class AuthorService implements AuthorServiceUseCase {
 
 	@Override
 	public List<AuthorDTO> findAllAuthors(Pageable page) {
-		//return authorMapper.toDTOList(authorDao.findAllAuthors(page));
 		return authorMapper.toDTOList(authorRepository.findAll(page).getContent());
 	}
 
 	@Override
 	public AuthorDTO findAuthorById(UUID authorId) {
-		//return authorMapper.toDTO(authorDao.findAuthorById(AUTHOR_UUID));
 		Optional<AuthorEntity> authorEntityOptional = authorRepository.findById(authorId);
 		if (authorEntityOptional.isEmpty()) {
 			throw new RuntimeException("Not found author");
@@ -45,7 +43,6 @@ public class AuthorService implements AuthorServiceUseCase {
 	public AuthorDTO createAuthor(AuthorDTO authorDTO) {
 		AuthorEntity authorEntityToSave = authorMapper.toEntity(authorDTO);
 
-		//return ResponseEntity.ok(authorMapper.toDTO(authorDao.createAuthor(authorEntityToSave)));
 		return authorMapper.toDTO(authorRepository.save(authorEntityToSave));
 	}
 
@@ -55,21 +52,15 @@ public class AuthorService implements AuthorServiceUseCase {
 
 		authorDTOFound.setFirstName(authorDTO.getFirstName());
 		authorDTOFound.setEmail(authorDTO.getEmail());
-		authorDTOFound.setAvailable(authorDTO.getAvailable());
 
-		//Author
-		//	updated =
-		//	authorMapper.toDTO(authorDao.updateAuthor(authorMapper.toEntity(authorFound)));
-		AuthorDTO
-			updated =
-			authorMapper.toDTO(authorRepository.save(authorMapper.toEntity(authorDTOFound)));
+		AuthorDTO updated = authorMapper.toDTO(authorRepository.save(authorMapper.toEntity(
+			authorDTOFound)));
 		return updated;
 	}
 
 	@Override
 	public void deleteAuthor(UUID authorId) {
 		AuthorDTO authorDTOFound = this.findAuthorById(authorId);
-		//authorDao.deleteAuthor(AUTHOR_UUID);
 		authorRepository.deleteById(authorDTOFound.getId());
 	}
 
@@ -77,7 +68,6 @@ public class AuthorService implements AuthorServiceUseCase {
 	public List<AuthorDTO> filterAuthors(Map<String, String> valuesToFilter, Pageable page) {
 		Specification<AuthorEntity> spec = AuthorSpecification.filterAuthors(valuesToFilter);
 
-		//return authorMapper.toDTOList(authorDao.filterAuthors(spec, page).getContent());
 		return authorMapper.toDTOList(authorRepository.findAll(spec, page).getContent());
 	}
 }

@@ -8,11 +8,11 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface AuthorMapper {
-	AuthorEntity toEntity(AuthorDTO authorDTO);
-
 	AuthorDTO toDTO(AuthorEntity authorEntity);
 
-	List<AuthorEntity> toEntityList(List<AuthorDTO> authorDTOList);
+	AuthorEntity toEntity(AuthorDTO authorDTO);
 
 	List<AuthorDTO> toDTOList(List<AuthorEntity> authorEntities);
+
+	List<AuthorEntity> toEntityList(List<AuthorDTO> authorDTOList);
 }
