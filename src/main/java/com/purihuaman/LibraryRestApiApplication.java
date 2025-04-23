@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @EntityScan("com.purihuaman.model")
 @EnableJpaRepositories("com.purihuaman.repository")
 public class LibraryRestApiApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(LibraryRestApiApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(LibraryRestApiApplication.class, args);
+    }
 }

@@ -12,10 +12,10 @@ import lombok.Setter;
 import java.util.UUID;
 
 @Builder
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class AuthorDTO {
 	@JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)
 	private UUID id;

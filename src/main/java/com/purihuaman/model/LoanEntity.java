@@ -9,14 +9,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity(name = "LOAN")
 @Table(name = "LOANS")
-@Data
+@NoArgsConstructor
+@Getter
+@Setter
 public class LoanEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)

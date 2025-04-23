@@ -13,10 +13,10 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Builder
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
+@Getter
+@Setter
 public class BookDTO {
 	@JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)
 	private UUID id;

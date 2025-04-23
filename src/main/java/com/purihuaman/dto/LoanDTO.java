@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Builder
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class LoanDTO {
 	@JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)
 	private UUID id;
