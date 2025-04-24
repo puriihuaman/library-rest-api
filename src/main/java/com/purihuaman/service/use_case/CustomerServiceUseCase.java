@@ -8,15 +8,15 @@ import java.util.Map;
 import java.util.UUID;
 
 public interface CustomerServiceUseCase {
-	List<CustomerDTO> findAllCustomers(Pageable page);
-
-	CustomerDTO findCustomerById(UUID customerId);
-
-	CustomerDTO createCustomer(CustomerDTO customerDTO);
-
-	CustomerDTO updateCustomer(UUID customerId, CustomerDTO customerDTO);
-
-	void deleteCustomer(UUID customerId);
-
-	List<CustomerDTO> filterCustomers(Map<String, String> valuesToFilter, Pageable page);
+    List<CustomerDTO> findAllCustomers(Pageable page);
+    
+    CustomerDTO findCustomerById(UUID customerId);
+    
+    CustomerDTO createCustomer(CustomerDTO customer);
+    
+    CustomerDTO updateCustomer(UUID customerId, CustomerDTO customer);
+    
+    void deleteCustomer(UUID customerId);
+    
+    List<CustomerDTO> filterCustomers(Map<String, String> valuesToFilter, Pageable page);
 }

@@ -8,15 +8,15 @@ import java.util.Map;
 import java.util.UUID;
 
 public interface PublisherServiceUseCase {
-	List<PublisherDTO> findAllPublishers(Pageable page);
-
-	PublisherDTO findPublisherById(UUID publisherId);
-
-	PublisherDTO createPublisher(PublisherDTO publisherDTO);
-
-	PublisherDTO updatePublisher(UUID publisherId, PublisherDTO publisherDTO);
-
-	void deletePublisher(UUID publisherId);
-
-	List<PublisherDTO> filterPublishers(Map<String, String> valuesToFilter, Pageable page);
+    List<PublisherDTO> findAllPublishers(Pageable page);
+    
+    PublisherDTO findPublisherById(UUID publisherId);
+    
+    PublisherDTO createPublisher(PublisherDTO publisher);
+    
+    PublisherDTO updatePublisher(UUID publisherId, PublisherDTO publisher);
+    
+    void deletePublisher(UUID publisherId);
+    
+    List<PublisherDTO> filterPublishers(Map<String, String> valuesToFilter, Pageable page);
 }
