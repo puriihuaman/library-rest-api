@@ -1,8 +1,8 @@
 package com.purihuaman.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,16 +16,12 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-public class AuthorDTO {
+public class PublisherDTO {
 	@JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)
 	private UUID id;
 
 	@NotNull
-	@JsonProperty(value = "firstName", required = true)
-	private String firstName;
-
-	@NotNull
-	@Email
-	@JsonProperty(value = "email", required = true)
-	private String email;
+	@Size(min = 2, max = 60)
+	@JsonProperty(value = "name", required = true)
+	private String name;
 }

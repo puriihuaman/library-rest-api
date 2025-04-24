@@ -1,13 +1,13 @@
 package com.purihuaman.service;
 
-import com.purihuaman.dto.AuthorDTO;
+import com.purihuaman.dto.CustomerDTO;
 import com.purihuaman.enums.APIError;
 import com.purihuaman.exception.APIRequestException;
-import com.purihuaman.mapper.AuthorMapper;
-import com.purihuaman.model.AuthorEntity;
-import com.purihuaman.repository.AuthorRepository;
-import com.purihuaman.service.use_case.AuthorServiceUseCase;
-import com.purihuaman.utils.AuthorSpecification;
+import com.purihuaman.mapper.CustomerMapper;
+import com.purihuaman.model.CustomerEntity;
+import com.purihuaman.repository.CustomerRepository;
+import com.purihuaman.service.use_case.CustomerServiceUseCase;
+import com.purihuaman.utils.CustomerSpecification;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -21,21 +21,21 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class AuthorService implements AuthorServiceUseCase {
-    private final AuthorRepository authorRepository;
-    private final AuthorMapper authorMapper;
+public class CustomerService implements CustomerServiceUseCase {
+    private final CustomerRepository customerRepository;
+    private final CustomerMapper customerMapper;
     
-    public AuthorService(AuthorRepository authorRepository, AuthorMapper authorMapper) {
-        this.authorRepository = authorRepository;
-        this.authorMapper = authorMapper;
+    public CustomerService(CustomerRepository customerRepository, CustomerMapper customerMapper) {
+        this.customerRepository = customerRepository;
+        this.customerMapper = customerMapper;
     }
     
     @Override
-    public List<AuthorDTO> findAllAuthors(Pageable page) {
+    public List<CustomerDTO> findAllCustomers(Pageable page) {
         try {
-            List<AuthorEntity> authors = authorRepository.findAll(page).getContent();
-            
-            return authorMapper.toDTOList(authors);
+            List<CustomerEntity> customers = customerRepository.findAll(page).getContent();
+
+            return customerMapper.toDTOList(customers);
         } catch (DataAccessException ex) {
             throw new APIRequestException(APIError.DATABASE_ERROR);
         } catch (Exception ex) {
@@ -44,19 +44,18 @@ public class AuthorService implements AuthorServiceUseCase {
     }
     
     @Override
-    public AuthorDTO findAuthorById(UUID authorId) {
+    public CustomerDTO findCustomerById(UUID customerId) {
         try {
-            Optional<AuthorEntity> response = authorRepository.findById(authorId);
+            Optional<CustomerEntity> response = customerRepository.findById(customerId);
             
             if (response.isEmpty()) {
-                APIError.RECORD_NOT_FOUND.setTitle("Author not found");
-                APIError.RECORD_NOT_FOUND.setMessage(
-                    "The author you are trying to access does not exist.");
+                APIError.RECORD_NOT_FOUND.setTitle("Customer Not Found");
+                APIError.RECORD_NOT_FOUND.setMessage("Customer Not Found");
                 throw new APIRequestException(APIError.RECORD_NOT_FOUND);
             }
-            AuthorEntity authorFound = response.get();
+            CustomerEntity customerFound = response.get();
             
-            return authorMapper.toDTO(authorFound);
+            return customerMapper.toDTO(customerFound);
         } catch (DataAccessException ex) {
             throw new APIRequestException(APIError.DATABASE_ERROR);
         } catch (Exception ex) {
@@ -65,12 +64,12 @@ public class AuthorService implements AuthorServiceUseCase {
     }
     
     @Override
-    public AuthorDTO createAuthor(AuthorDTO author) {
+    public CustomerDTO createCustomer(CustomerDTO customer) {
         try {
-            AuthorEntity authorToSave = authorMapper.toEntity(author);
-            AuthorEntity savedAuthor = authorRepository.save(authorToSave);
+            CustomerEntity customerToSave = customerMapper.toEntity(customer);
+            CustomerEntity savedCustomer = customerRepository.save(customerToSave);
             
-            return authorMapper.toDTO(savedAuthor);
+            return customerMapper.toDTO(savedCustomer);
         } catch (APIRequestException ex) {
             throw ex;
         } catch (DataIntegrityViolationException ex) {
@@ -89,17 +88,20 @@ public class AuthorService implements AuthorServiceUseCase {
     }
     
     @Override
-    public AuthorDTO updateAuthor(UUID authorId, AuthorDTO author) {
+    public CustomerDTO updateCustomer(UUID customerId, CustomerDTO customer) {
         try {
-            AuthorDTO authorFound = this.findAuthorById(authorId);
+            CustomerDTO customerFound = this.findCustomerById(customerId);
             
-            authorFound.setFirstName(author.getFirstName());
-            authorFound.setEmail(author.getEmail());
+            customerFound.setFirstName(customer.getFirstName());
+            customerFound.setLastName(customer.getLastName());
+            customerFound.setEmail(customer.getEmail());
+            customerFound.setPhoneNumber(customer.getPhoneNumber());
+            customerFound.setDocumentId(customer.getDocumentId());
             
-            AuthorEntity authorToUpdate = authorMapper.toEntity(authorFound);
-            AuthorEntity updatedAuthor = authorRepository.save(authorToUpdate);
+            CustomerEntity customerToUpdate = customerMapper.toEntity(customerFound);
+            CustomerEntity updatedCustomer = customerRepository.save(customerToUpdate);
             
-            return authorMapper.toDTO(updatedAuthor);
+            return customerMapper.toDTO(updatedCustomer);
         } catch (APIRequestException ex) {
             throw ex;
         } catch (DataIntegrityViolationException ex) {
@@ -118,11 +120,10 @@ public class AuthorService implements AuthorServiceUseCase {
     }
     
     @Override
-    public void deleteAuthor(UUID authorId) {
+    public void deleteCustomer(UUID customerId) {
         try {
-            AuthorDTO authorFound = this.findAuthorById(authorId);
-            
-            authorRepository.deleteById(authorFound.getId());
+            CustomerDTO customerDTOFound = this.findCustomerById(customerId);
+            customerRepository.deleteById(customerDTOFound.getId());
         } catch (APIRequestException ex) {
             throw ex;
         } catch (DataIntegrityViolationException ex) {
@@ -141,12 +142,13 @@ public class AuthorService implements AuthorServiceUseCase {
     }
     
     @Override
-    public List<AuthorDTO> filterAuthors(Map<String, String> valuesToFilter, Pageable page) {
+    public List<CustomerDTO> filterCustomers(Map<String, String> valuesToFilter, Pageable page) {
         try {
-            Specification<AuthorEntity> spec = AuthorSpecification.filterAuthors(valuesToFilter);
-            List<AuthorEntity> authors = authorRepository.findAll(spec, page).getContent();
+            Specification<CustomerEntity> spec = CustomerSpecification.filterCustomers(
+                valuesToFilter);
+            List<CustomerEntity> customers = customerRepository.findAll(spec, page).getContent();
             
-            return authorMapper.toDTOList(authors);
+            return customerMapper.toDTOList(customers);
         } catch (DataAccessException ex) {
             throw new APIRequestException(APIError.DATABASE_ERROR);
         } catch (Exception ex) {

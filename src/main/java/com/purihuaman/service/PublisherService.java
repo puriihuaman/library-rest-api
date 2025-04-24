@@ -1,13 +1,13 @@
 package com.purihuaman.service;
 
-import com.purihuaman.dto.AuthorDTO;
+import com.purihuaman.dto.PublisherDTO;
 import com.purihuaman.enums.APIError;
 import com.purihuaman.exception.APIRequestException;
-import com.purihuaman.mapper.AuthorMapper;
-import com.purihuaman.model.AuthorEntity;
-import com.purihuaman.repository.AuthorRepository;
-import com.purihuaman.service.use_case.AuthorServiceUseCase;
-import com.purihuaman.utils.AuthorSpecification;
+import com.purihuaman.mapper.PublisherMapper;
+import com.purihuaman.model.PublisherEntity;
+import com.purihuaman.repository.PublisherRepository;
+import com.purihuaman.service.use_case.PublisherServiceUseCase;
+import com.purihuaman.utils.PublisherSpecification;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -21,21 +21,26 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class AuthorService implements AuthorServiceUseCase {
-    private final AuthorRepository authorRepository;
-    private final AuthorMapper authorMapper;
+public class PublisherService implements PublisherServiceUseCase {
+    private final PublisherRepository publisherRepository;
+    private final PublisherMapper publisherMapper;
     
-    public AuthorService(AuthorRepository authorRepository, AuthorMapper authorMapper) {
-        this.authorRepository = authorRepository;
-        this.authorMapper = authorMapper;
+    public PublisherService(
+        PublisherRepository publisherRepository,
+        PublisherMapper publisherMapper
+    )
+    {
+        this.publisherRepository = publisherRepository;
+        this.publisherMapper = publisherMapper;
     }
     
     @Override
-    public List<AuthorDTO> findAllAuthors(Pageable page) {
+    public List<PublisherDTO> findAllPublishers(Pageable page) {
         try {
-            List<AuthorEntity> authors = authorRepository.findAll(page).getContent();
-            
-            return authorMapper.toDTOList(authors);
+            List<PublisherEntity>
+                publisherEntities =
+                publisherRepository.findAll(page).getContent();
+            return publisherMapper.toDTOList(publisherEntities);
         } catch (DataAccessException ex) {
             throw new APIRequestException(APIError.DATABASE_ERROR);
         } catch (Exception ex) {
@@ -44,19 +49,19 @@ public class AuthorService implements AuthorServiceUseCase {
     }
     
     @Override
-    public AuthorDTO findAuthorById(UUID authorId) {
+    public PublisherDTO findPublisherById(UUID publisherId) {
         try {
-            Optional<AuthorEntity> response = authorRepository.findById(authorId);
+            Optional<PublisherEntity> response = publisherRepository.findById(publisherId);
             
             if (response.isEmpty()) {
-                APIError.RECORD_NOT_FOUND.setTitle("Author not found");
+                APIError.RECORD_NOT_FOUND.setTitle("Publisher not found");
                 APIError.RECORD_NOT_FOUND.setMessage(
-                    "The author you are trying to access does not exist.");
+                    "The publisher you are trying to access does not exist.");
                 throw new APIRequestException(APIError.RECORD_NOT_FOUND);
             }
-            AuthorEntity authorFound = response.get();
+            PublisherEntity publisherFound = response.get();
             
-            return authorMapper.toDTO(authorFound);
+            return publisherMapper.toDTO(publisherFound);
         } catch (DataAccessException ex) {
             throw new APIRequestException(APIError.DATABASE_ERROR);
         } catch (Exception ex) {
@@ -65,12 +70,12 @@ public class AuthorService implements AuthorServiceUseCase {
     }
     
     @Override
-    public AuthorDTO createAuthor(AuthorDTO author) {
+    public PublisherDTO createPublisher(PublisherDTO publisher) {
         try {
-            AuthorEntity authorToSave = authorMapper.toEntity(author);
-            AuthorEntity savedAuthor = authorRepository.save(authorToSave);
+            PublisherEntity publisherToSave = publisherMapper.toEntity(publisher);
+            PublisherEntity savedPublisher = publisherRepository.save(publisherToSave);
             
-            return authorMapper.toDTO(savedAuthor);
+            return publisherMapper.toDTO(savedPublisher);
         } catch (APIRequestException ex) {
             throw ex;
         } catch (DataIntegrityViolationException ex) {
@@ -89,17 +94,16 @@ public class AuthorService implements AuthorServiceUseCase {
     }
     
     @Override
-    public AuthorDTO updateAuthor(UUID authorId, AuthorDTO author) {
+    public PublisherDTO updatePublisher(UUID publisherId, PublisherDTO publisher) {
         try {
-            AuthorDTO authorFound = this.findAuthorById(authorId);
+            PublisherDTO publisherFound = this.findPublisherById(publisherId);
             
-            authorFound.setFirstName(author.getFirstName());
-            authorFound.setEmail(author.getEmail());
+            publisherFound.setName(publisher.getName());
             
-            AuthorEntity authorToUpdate = authorMapper.toEntity(authorFound);
-            AuthorEntity updatedAuthor = authorRepository.save(authorToUpdate);
+            PublisherEntity publisherToUpdate = publisherMapper.toEntity(publisherFound);
+            PublisherEntity updatedPublisher = publisherRepository.save(publisherToUpdate);
             
-            return authorMapper.toDTO(updatedAuthor);
+            return publisherMapper.toDTO(updatedPublisher);
         } catch (APIRequestException ex) {
             throw ex;
         } catch (DataIntegrityViolationException ex) {
@@ -118,11 +122,10 @@ public class AuthorService implements AuthorServiceUseCase {
     }
     
     @Override
-    public void deleteAuthor(UUID authorId) {
+    public void deletePublisher(UUID publisherId) {
         try {
-            AuthorDTO authorFound = this.findAuthorById(authorId);
-            
-            authorRepository.deleteById(authorFound.getId());
+            PublisherDTO publisherFound = this.findPublisherById(publisherId);
+            publisherRepository.deleteById(publisherFound.getId());
         } catch (APIRequestException ex) {
             throw ex;
         } catch (DataIntegrityViolationException ex) {
@@ -141,12 +144,14 @@ public class AuthorService implements AuthorServiceUseCase {
     }
     
     @Override
-    public List<AuthorDTO> filterAuthors(Map<String, String> valuesToFilter, Pageable page) {
+    public List<PublisherDTO> filterPublishers(Map<String, String> valuesToFilter, Pageable page) {
         try {
-            Specification<AuthorEntity> spec = AuthorSpecification.filterAuthors(valuesToFilter);
-            List<AuthorEntity> authors = authorRepository.findAll(spec, page).getContent();
+            Specification<PublisherEntity> spec = PublisherSpecification.filterPublishers(
+                valuesToFilter);
             
-            return authorMapper.toDTOList(authors);
+            List<PublisherEntity> publishers = publisherRepository.findAll(spec, page).getContent();
+            
+            return publisherMapper.toDTOList(publishers);
         } catch (DataAccessException ex) {
             throw new APIRequestException(APIError.DATABASE_ERROR);
         } catch (Exception ex) {

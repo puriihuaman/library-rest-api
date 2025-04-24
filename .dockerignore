@@ -13,6 +13,6 @@ build/*
 .idea/
 *.iml
 *.iws
-target/
+#target/
 .sonar/
 .sonarlint/

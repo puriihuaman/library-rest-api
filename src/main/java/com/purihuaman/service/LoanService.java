@@ -1,41 +1,52 @@
 package com.purihuaman.service;
 
-import com.purihuaman.dto.AuthorDTO;
+import com.purihuaman.dto.BookDTO;
+import com.purihuaman.dto.CustomerDTO;
+import com.purihuaman.dto.LoanDTO;
 import com.purihuaman.enums.APIError;
 import com.purihuaman.exception.APIRequestException;
-import com.purihuaman.mapper.AuthorMapper;
-import com.purihuaman.model.AuthorEntity;
-import com.purihuaman.repository.AuthorRepository;
-import com.purihuaman.service.use_case.AuthorServiceUseCase;
-import com.purihuaman.utils.AuthorSpecification;
+import com.purihuaman.mapper.LoanMapper;
+import com.purihuaman.model.LoanEntity;
+import com.purihuaman.repository.LoanRepository;
+import com.purihuaman.service.use_case.LoanServiceUseCase;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class AuthorService implements AuthorServiceUseCase {
-    private final AuthorRepository authorRepository;
-    private final AuthorMapper authorMapper;
+public class LoanService implements LoanServiceUseCase {
+    private final LoanRepository loanRepository;
+    private final LoanMapper loanMapper;
+    private final BookService bookService;
+    private final CustomerService customerService;
     
-    public AuthorService(AuthorRepository authorRepository, AuthorMapper authorMapper) {
-        this.authorRepository = authorRepository;
-        this.authorMapper = authorMapper;
+    public LoanService(
+        LoanRepository loanRepository,
+        LoanMapper loanMapper,
+        BookService bookService,
+        CustomerService customerService
+    )
+    {
+        this.loanRepository = loanRepository;
+        this.loanMapper = loanMapper;
+        this.bookService = bookService;
+        this.customerService = customerService;
     }
     
     @Override
-    public List<AuthorDTO> findAllAuthors(Pageable page) {
+    public List<LoanDTO> findAllLoans(Pageable page) {
         try {
-            List<AuthorEntity> authors = authorRepository.findAll(page).getContent();
+            List<LoanEntity> loans = loanRepository.findAll(page).getContent();
             
-            return authorMapper.toDTOList(authors);
+            return loanMapper.toDTOList(loans);
         } catch (DataAccessException ex) {
             throw new APIRequestException(APIError.DATABASE_ERROR);
         } catch (Exception ex) {
@@ -44,19 +55,20 @@ public class AuthorService implements AuthorServiceUseCase {
     }
     
     @Override
-    public AuthorDTO findAuthorById(UUID authorId) {
+    public LoanDTO findLoanById(UUID loanId) {
         try {
-            Optional<AuthorEntity> response = authorRepository.findById(authorId);
+            Optional<LoanEntity> response = loanRepository.findById(loanId);
             
             if (response.isEmpty()) {
-                APIError.RECORD_NOT_FOUND.setTitle("Author not found");
+                APIError.RECORD_NOT_FOUND.setTitle("Loan not found");
                 APIError.RECORD_NOT_FOUND.setMessage(
-                    "The author you are trying to access does not exist.");
+                    "The loan you are trying to access does not exist.");
+                
                 throw new APIRequestException(APIError.RECORD_NOT_FOUND);
             }
-            AuthorEntity authorFound = response.get();
+            LoanEntity loan = response.get();
             
-            return authorMapper.toDTO(authorFound);
+            return loanMapper.toDTO(loan);
         } catch (DataAccessException ex) {
             throw new APIRequestException(APIError.DATABASE_ERROR);
         } catch (Exception ex) {
@@ -65,12 +77,27 @@ public class AuthorService implements AuthorServiceUseCase {
     }
     
     @Override
-    public AuthorDTO createAuthor(AuthorDTO author) {
+    public LoanDTO createLoan(LoanDTO loan) {
         try {
-            AuthorEntity authorToSave = authorMapper.toEntity(author);
-            AuthorEntity savedAuthor = authorRepository.save(authorToSave);
+            BookDTO book = this.bookService.findBookById(loan.getBookId());
+            CustomerDTO customer = this.customerService.findCustomerById(loan.getCustomerId());
             
-            return authorMapper.toDTO(savedAuthor);
+            LoanDTO
+                loanToSave =
+                LoanDTO
+                    .builder()
+                    .loanDate(LocalDateTime.now())
+                    .returnDate(loan.getReturnDate())
+                    .bookId(book.getId())
+                    .customerId(customer.getId())
+                    .build();
+            
+            LoanEntity loanEntity = loanMapper.toEntity(loanToSave);
+            
+            bookService.updateBorrowedBookCount(book.getId(), 1);
+            LoanEntity savedLoan = loanRepository.save(loanEntity);
+            
+            return loanMapper.toDTO(savedLoan);
         } catch (APIRequestException ex) {
             throw ex;
         } catch (DataIntegrityViolationException ex) {
@@ -89,17 +116,9 @@ public class AuthorService implements AuthorServiceUseCase {
     }
     
     @Override
-    public AuthorDTO updateAuthor(UUID authorId, AuthorDTO author) {
+    public LoanDTO updateLoan(UUID loanId, LoanDTO loan) {
         try {
-            AuthorDTO authorFound = this.findAuthorById(authorId);
-            
-            authorFound.setFirstName(author.getFirstName());
-            authorFound.setEmail(author.getEmail());
-            
-            AuthorEntity authorToUpdate = authorMapper.toEntity(authorFound);
-            AuthorEntity updatedAuthor = authorRepository.save(authorToUpdate);
-            
-            return authorMapper.toDTO(updatedAuthor);
+            return null;
         } catch (APIRequestException ex) {
             throw ex;
         } catch (DataIntegrityViolationException ex) {
@@ -118,11 +137,11 @@ public class AuthorService implements AuthorServiceUseCase {
     }
     
     @Override
-    public void deleteAuthor(UUID authorId) {
+    public void deleteLoan(UUID loanId) {
         try {
-            AuthorDTO authorFound = this.findAuthorById(authorId);
+            LoanDTO loanFound = this.findLoanById(loanId);
             
-            authorRepository.deleteById(authorFound.getId());
+            loanRepository.deleteById(loanFound.getId());
         } catch (APIRequestException ex) {
             throw ex;
         } catch (DataIntegrityViolationException ex) {
@@ -141,12 +160,9 @@ public class AuthorService implements AuthorServiceUseCase {
     }
     
     @Override
-    public List<AuthorDTO> filterAuthors(Map<String, String> valuesToFilter, Pageable page) {
+    public List<LoanDTO> filterLoans(Map<String, String> valuesToFilter, Pageable page) {
         try {
-            Specification<AuthorEntity> spec = AuthorSpecification.filterAuthors(valuesToFilter);
-            List<AuthorEntity> authors = authorRepository.findAll(spec, page).getContent();
-            
-            return authorMapper.toDTOList(authors);
+            return List.of();
         } catch (DataAccessException ex) {
             throw new APIRequestException(APIError.DATABASE_ERROR);
         } catch (Exception ex) {

@@ -1,19 +1,18 @@
 package com.purihuaman.mapper;
 
-import java.util.List;
-
+import com.purihuaman.dto.AuthorDTO;
+import com.purihuaman.model.AuthorEntity;
 import org.mapstruct.Mapper;
 
-import com.purihuaman.dto.AuthorDTO;
-import com.purihuaman.entity.Author;
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface AuthorMapper {
-	Author toAuthor(AuthorDTO author);
+	AuthorDTO toDTO(AuthorEntity authorEntity);
 
-	AuthorDTO toAuthorDTO(Author author);
+	AuthorEntity toEntity(AuthorDTO authorDTO);
 
-	List<Author> toAuthorList(List<AuthorDTO> authors);
+	List<AuthorDTO> toDTOList(List<AuthorEntity> authorEntities);
 
-	List<AuthorDTO> toAuthorDTOList(List<Author> authors);
+	List<AuthorEntity> toEntityList(List<AuthorDTO> authorDTOList);
 }
