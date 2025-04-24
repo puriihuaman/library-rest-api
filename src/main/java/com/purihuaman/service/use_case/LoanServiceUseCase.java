@@ -8,15 +8,15 @@ import java.util.Map;
 import java.util.UUID;
 
 public interface LoanServiceUseCase {
-	List<LoanDTO> findAllLoans(Pageable page);
-
-	LoanDTO findLoanById(UUID id);
-
-	LoanDTO createLoan(LoanDTO loanDTO);
-
-	LoanDTO updateLoan(UUID id, LoanDTO loanDTO);
-
-	void deleteLoan(UUID id);
-
-	List<LoanDTO> filterLoans(Map<String, String> valuesToFilter, Pageable page);
+    List<LoanDTO> findAllLoans(Pageable page);
+    
+    LoanDTO findLoanById(UUID loanId);
+    
+    LoanDTO createLoan(LoanDTO loan);
+    
+    LoanDTO updateLoan(UUID loanId, LoanDTO loan);
+    
+    void deleteLoan(UUID loanId);
+    
+    List<LoanDTO> filterLoans(Map<String, String> valuesToFilter, Pageable page);
 }

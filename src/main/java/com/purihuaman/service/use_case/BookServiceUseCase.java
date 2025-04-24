@@ -8,17 +8,17 @@ import java.util.Map;
 import java.util.UUID;
 
 public interface BookServiceUseCase {
-	List<BookDTO> findAllBooks(Pageable page);
-
-	BookDTO findBookById(UUID isbn);
-
-	BookDTO createBook(BookDTO bookDTO);
-
-	BookDTO updateBook(UUID isbn, BookDTO bookDTO);
-
-	void deleteBook(UUID isbn);
-
-	List<BookDTO> filterBooks(Map<String, String> valuesToFilter, Pageable page);
-
-	void updateBorrowedBookCount(UUID id, Integer amount);
+    List<BookDTO> findAllBooks(Pageable page);
+    
+    BookDTO findBookById(UUID isbn);
+    
+    BookDTO createBook(BookDTO book);
+    
+    BookDTO updateBook(UUID isbn, BookDTO book);
+    
+    void deleteBook(UUID isbn);
+    
+    List<BookDTO> filterBooks(Map<String, String> valuesToFilter, Pageable page);
+    
+    void updateBorrowedBookCount(UUID isbn, Integer amount);
 }
